@@ -27,7 +27,8 @@ export default function AgentsDashboard() {
     status: 'idle',
     description: '',
     temperature: 0.7,
-    systemPrompt: ''
+    systemPrompt: '',
+    agentApi: ''
   });
 
   const loadAgents = async (searchTerm = '') => {
@@ -60,7 +61,8 @@ export default function AgentsDashboard() {
       status: 'idle',
       description: '',
       temperature: 0.7,
-      systemPrompt: ''
+      systemPrompt: '',
+      agentApi: ''
     });
     setError('');
     setIsFormOpen(true);
@@ -74,7 +76,8 @@ export default function AgentsDashboard() {
       status: agent.status || 'idle',
       description: agent.config?.description || '',
       temperature: agent.config?.temperature || 0.7,
-      systemPrompt: agent.config?.systemPrompt || ''
+      systemPrompt: agent.config?.systemPrompt || '',
+      agentApi: agent.config?.agentApi || ''
     });
     setError('');
     setIsFormOpen(true);
@@ -112,7 +115,8 @@ export default function AgentsDashboard() {
       config: {
         description: formData.description,
         temperature: parseFloat(formData.temperature) || 0.7,
-        systemPrompt: formData.systemPrompt
+        systemPrompt: formData.systemPrompt,
+        agentApi: formData.agentApi
       }
     };
 
@@ -257,17 +261,22 @@ export default function AgentsDashboard() {
                   <span>Temp: {agent.config?.temperature || 0.7}</span>
                   <span className="truncate max-w-[120px]">Owner: {agent.owner?.name || 'You'}</span>
                 </div>
+                {agent.config?.agentApi && (
+                  <div className="mt-2 pt-1 text-[11px] text-slate-500 truncate border-t border-dark-900/40">
+                    <span className="font-semibold text-slate-400">API:</span> <span className="font-mono text-brand-400/90">{agent.config.agentApi}</span>
+                  </div>
+                )}
               </div>
 
               <div className="mt-6 pt-4 border-t border-dark-900 flex justify-between items-center">
                 <a 
-                  href={`http://localhost:5000/api/agents/${agent._id}`}
+                  href={agent.config?.agentApi || `http://localhost:5000/api/agents/${agent._id}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-xs font-semibold text-brand-400 hover:text-brand-300 flex items-center space-x-1.5 transition-colors"
                 >
                   <ExternalLink className="h-3.5 w-3.5" />
-                  <span>Live API Link</span>
+                  <span>{agent.config?.agentApi ? 'Custom API Link' : 'Live API Link'}</span>
                 </a>
                 <div className="flex space-x-2">
                   <button
@@ -405,6 +414,20 @@ export default function AgentsDashboard() {
                   onChange={handleFormChange}
                   placeholder="You are an AI research specialist designed to scan logs..."
                   className="w-full bg-dark-900 border border-dark-850 focus:border-brand-500 focus:outline-none rounded-xl px-4 py-2.5 text-sm text-white font-mono text-xs"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-semibold text-xs uppercase tracking-wider mb-2">
+                  Agent API Endpoint
+                </label>
+                <input
+                  type="text"
+                  name="agentApi"
+                  value={formData.agentApi}
+                  onChange={handleFormChange}
+                  placeholder="e.g. https://api.aether.ai/v1/agents/my-agent"
+                  className="w-full bg-dark-900 border border-dark-850 hover:border-dark-750 focus:border-brand-500 focus:outline-none rounded-xl px-4 py-2.5 text-sm text-white"
                 />
               </div>
 

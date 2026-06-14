@@ -26,7 +26,8 @@ const AgentSchema = new mongoose.Schema({
     description: { type: String, default: '' },
     temperature: { type: Number, default: 0.7 },
     systemPrompt: { type: String, default: '' },
-    apiKeyRequired: { type: Boolean, default: false }
+    apiKeyRequired: { type: Boolean, default: false },
+    agentApi: { type: String, default: '' }
   },
   createdAt: {
     type: Date,
